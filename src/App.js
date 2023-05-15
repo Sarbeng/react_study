@@ -1,41 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react"
 
 export default function App() {
-  const [giftCard, setGiftCard] = useState(
-    {
-        firstName: "Jennifer",
-        lastName: "Smith",
-        text: "Free dinner for 4 guests",
-        valid: true,
-        instructions: "To use your coupon, click the button below.",
-    }
-  );
+  const [btcData, setBtcData] = useState({})
 
-  function spendGiftCard() {
-
-  }
-
+  // we are going to fetch data here using the useEffect hook
+  useEffect(() => {
+    fetch(`https://api.coindesk.com/v1/bpi/currentprice.json`)
+    .then((response) => response.json())
+    .then((jsonData) => setBtcData(jsonData.bpi.USD))
+    .catch((error) => console.log(error))
+  },[])
   return (
-    <div style={{padding: '40px'}}>
-      <h1>
-        Gift Card Page
-      </h1>
-      <h2>
-        Customer: {giftCard.firstName} {giftCard.lastName}
-      </h2>
-      <h3>
-        {giftCard.text}
-      </h3>
-      <p>
-        {giftCard.instructions}
-      </p>
-      {
-        giftCard.valid && (
-          <button onClick={spendGiftCard}>
-            Spend Gift Card
-          </button>
-        )
-      }
+    <div>
+      <h1>Current BTC/USD data</h1> 
+      <p>Code: {btcData.code}</p> 
+      <p>Symbol: {btcData.symbol}</p> 
+      <p>Rate: {btcData.rate}</p> 
+      <p>Description: {btcData.description}</p> 
+      <p>Rate Float: {btcData.rate_float}</p>
     </div>
-  );
+  )
 }
